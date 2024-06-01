@@ -4,11 +4,14 @@
     nixpkgs.url = "nixpkgs/nixos-unstable";
     flake-utils.url = "github:numtide/flake-utils";
   };
-  outputs = { self, nixpkgs, flake-utils }:
+  outputs = params@{ self, nixpkgs, flake-utils }:
     flake-utils.lib.eachDefaultSystem (system:
     let
-      pkgs = import nixpkgs { inherit system; };
-      snitch = pkgs.gcc13Stdenv.mkDerivation {
+      pkgs = import nixpkgs {
+        inherit system;
+        config.allowUnfreePredicate = pkg: builtins.elem (nixpkgs.lib.getName pkg) [ "clion" ];
+      };
+      snitch = pkgs.gcc14Stdenv.mkDerivation {
         name = "snitch_tests";
         buildInputs = [ ];
         nativeBuildInputs = with pkgs; [ cmake ninja python3 ];
@@ -19,11 +22,16 @@
           sha256 = "sha256-xeiGCQia0tId4GN/w6Kfz4Ga8u6pWSe6gi9VRz2Pwok=";
         };
       };
-      serp = pkgs.gcc13Stdenv.mkDerivation {
+      dev = pkgs.gcc14Stdenv.mkDerivation {
+        name = "cppbm-dev";
+        nativeBuildInputs = [pkgs.clang_17 pkgs.jetbrains.clion];
+        src = ./.;
+      };
+      serp = pkgs.gcc14Stdenv.mkDerivation {
         name = "serp";
         buildInputs = [pkgs.boost snitch];
         snitch_header = snitch.out;
-        nativeBuildInputs = [pkgs.clang_15];
+        nativeBuildInputs = [pkgs.clang_17];
         CPATH = pkgs.lib.strings.concatStringsSep ":" [
           "${snitch}/include/snitch"
         ];
@@ -35,13 +43,13 @@
         meta.description = "cpp universal serialization library.";
         src = ./serp;
       };
-      stfm = pkgs.gcc12Stdenv.mkDerivation {
+      stfm = pkgs.gcc14Stdenv.mkDerivation {
         name = "stfmeta";
         src = ./stfmeta;
         buildPhase = "make && cp mkdir -p \"$out/include\" && cp -rt \"$out/include\" stfmeta";
       };
     in rec {
-      devShell = serp;
+      devShell = dev;
       packages.default = serp;
       packages.serp = serp;
       packages.stfm = stfm;
