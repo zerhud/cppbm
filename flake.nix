@@ -16,7 +16,7 @@
         buildInputs = [ ];
         nativeBuildInputs = with pkgs; [ cmake ninja python3 ];
         #cmakeFlags = [ "-D" "snitch:create_library=true" ];
-        #cmakeFlags = [ "-DSNITCH_HEADER_ONLY=ON" ];
+        cmakeFlags = [ "-DSNITCH_HEADER_ONLY=ON" ];
         src = pkgs.fetchzip {
           url = "https://github.com/cschreib/snitch/archive/refs/tags/v1.2.2.tar.gz";
           sha256 = "sha256-xeiGCQia0tId4GN/w6Kfz4Ga8u6pWSe6gi9VRz2Pwok=";
@@ -24,7 +24,7 @@
       };
       dev = pkgs.gcc14Stdenv.mkDerivation {
         name = "cppbm-dev";
-        nativeBuildInputs = [pkgs.clang_17 pkgs.jetbrains.clion];
+        nativeBuildInputs = [pkgs.clang_17 pkgs.jetbrains.clion snitch];
         src = ./.;
       };
       serp = pkgs.gcc14Stdenv.mkDerivation {
@@ -38,15 +38,16 @@
         LIBRARY_PATH = pkgs.lib.strings.concatStringsSep ":" [
           "${snitch}/lib"
         ];
-        #installPhase = "mkdir -p \"$out/include\" && cp serp.hpp -t \"$out/include\" && cp -rt \"$out/include\" serp";
-        #buildPhase = "g++ -std=c++23 -fwhole-program -march=native ./test.cpp -o serp && ./serp_test";
+        installPhase = "mkdir -p \"$out/include\" && cp serp/serp.hpp -t \"$out/include\"";
+        buildPhase = "g++ -std=c++23 -fwhole-program -march=native ./serp/tests/test.cpp -o serp_test && ./serp_test";
         meta.description = "cpp universal serialization library.";
         src = ./serp;
       };
       stfm = pkgs.gcc14Stdenv.mkDerivation {
         name = "stfmeta";
         src = ./stfmeta;
-        buildPhase = "make && cp mkdir -p \"$out/include\" && cp -rt \"$out/include\" stfmeta";
+        buildPhase = "g++ -std=c++23 -fwhole-program -march=native ./stfmeta/tests/test.cpp -o stfmeta_test && ./stfmeta_test";
+        installPhase = "mkdir -p \"$out/include\" && cp -t \"$out/include\" stfmeta/stfmeta.hpp";
       };
     in rec {
       devShell = dev;

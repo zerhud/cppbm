@@ -1,3 +1,6 @@
+/* Copyright (C) 2024 Hudyaev Alexey
+ * SPDX-License-Identifier:    MIT
+ */
 #pragma once
 
 #include <utility>

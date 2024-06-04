@@ -1,8 +1,11 @@
+/* Copyright (C) 2024 Hudyaev Alexey
+ * SPDX-License-Identifier:    MIT
+ */
 #include "serp.hpp"
 
-//#define SNITCH_IMPLEMENTATION
-//#include <snitch_all.hpp>
-#include <snitch/snitch.hpp>
+#define SNITCH_IMPLEMENTATION
+#include <snitch/snitch_all.hpp>
+//#include <snitch/snitch.hpp>
 
 #include <bit>
 #include <new>

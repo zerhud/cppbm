@@ -2,7 +2,7 @@
  * SPDX-License-Identifier:    MIT
  */
 
-#include "counter.h"
+#include "stfmeta.hpp"
 
 struct tag1 {};
 struct tag2 {};
