@@ -31,7 +31,7 @@
         name = "reflection";
         meta.description = "simple c++ reflection library";
         buildPhase = "g++ -std=c++23 -fwhole-program -I. ./tests/reflection.cpp -o test_reflection && ./test_reflection";
-        installPhase = "mkdir -p \"$out/include\" && cp -rt \"$out/include\" reflection.ipp utility.ipp reflection";
+        installPhase = "mkdir -p \"$out/include\" && cp -rt \"$out/include\" tref.hpp reflection.ipp utility.ipp reflection";
         src = ./reflection;
       };
       serp = pkgs.gcc14Stdenv.mkDerivation {
@@ -62,6 +62,7 @@
       packages.serp = serp;
       packages.stfm = stfm;
       packages.reflection = reflection;
-      defaultPackage = serp;
+      packages.tref = reflection;
+      defaultPackage = reflection;
     });
 }
