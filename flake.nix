@@ -27,6 +27,13 @@
         nativeBuildInputs = [pkgs.clang_17 pkgs.jetbrains.clion snitch];
         src = ./.;
       };
+      reflection = pkgs.gcc14Stdenv.mkDerivation {
+        name = "reflection";
+        meta.description = "simple c++ reflection library";
+        buildPhase = "g++ -std=c++23 -fwhole-program -I. ./tests/reflection.cpp -o test_reflection && ./test_reflection";
+        installPhase = "mkdir -p \"$out/include\" && cp -rt \"$out/include\" reflection.ipp utility.ipp reflection";
+        src = ./reflection;
+      };
       serp = pkgs.gcc14Stdenv.mkDerivation {
         name = "serp";
         buildInputs = [pkgs.boost snitch];
@@ -42,19 +49,19 @@
         buildPhase = "g++ -std=c++23 -fwhole-program -march=native -I. ./tests/test.cpp -o serp_test && ./serp_test";
         meta.description = "cpp universal serialization library.";
         src = ./serp;
-        #src = ./.;
       };
       stfm = pkgs.gcc14Stdenv.mkDerivation {
         name = "stfmeta";
         src = ./stfmeta;
-        buildPhase = "g++ -std=c++23 -fwhole-program -march=native ./stfmeta/tests/test.cpp -o stfmeta_test && ./stfmeta_test";
-        installPhase = "mkdir -p \"$out/include\" && cp -t \"$out/include\" stfmeta/stfmeta.hpp";
+        buildPhase = "g++ -std=c++23 -fwhole-program -march=native -I. ./tests/test.cpp -o stfmeta_test && ./stfmeta_test";
+        installPhase = "mkdir -p \"$out/include\" && cp -t \"$out/include\" stfmeta.hpp";
       };
     in rec {
       devShell = dev;
       packages.default = serp;
       packages.serp = serp;
       packages.stfm = stfm;
+      packages.reflection = reflection;
       defaultPackage = serp;
     });
 }
