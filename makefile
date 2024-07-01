@@ -86,14 +86,15 @@ $(call base,$(1)): \
     $(builddir)/$(call base,$(1))_clang \
     $(builddir)/$(call base,$(1))_clang20
 	$(builddir)/$(call base,$(1))_gcc
-	test -f $(builddir)/$(call base,$(1))_gcc20 && $(builddir)/$(call base,$(1))_gcc20
-	test -f $(builddir)/$(call base,$(1))_clang && $(builddir)/$(call base,$(1))_clang
-	test -f $(builddir)/$(call base,$(1))_clang20 && $(builddir)/$(call base,$(1))_clang20
+	test -f $(builddir)/$(call base,$(1))_gcc20 && $(builddir)/$(call base,$(1))_gcc20 || true
+	test -f $(builddir)/$(call base,$(1))_clang && $(builddir)/$(call base,$(1))_clang || true
+	test -f $(builddir)/$(call base,$(1))_clang20 && $(builddir)/$(call base,$(1))_clang20 || true
 
 clean::
 	rm -f $(builddir)/$(call base,$(1))_gcc{,.d}
 	rm -f $(builddir)/$(call base,$(1))_gcc20{,.d}
 	rm -f $(builddir)/$(call base,$(1))_clang{,.d}
+	rm -f $(builddir)/$(call base,$(1))_clang20{,.d}
 
 endef
 

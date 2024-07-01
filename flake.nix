@@ -38,10 +38,11 @@
         LIBRARY_PATH = pkgs.lib.strings.concatStringsSep ":" [
           "${snitch}/lib"
         ];
-        installPhase = "mkdir -p \"$out/include\" && cp serp/serp.hpp -t \"$out/include\"";
-        buildPhase = "g++ -std=c++23 -fwhole-program -march=native ./serp/tests/test.cpp -o serp_test && ./serp_test";
+        installPhase = "mkdir -p \"$out/include\" && cp serp.hpp -t \"$out/include\"";
+        buildPhase = "g++ -std=c++23 -fwhole-program -march=native -I. ./tests/test.cpp -o serp_test && ./serp_test";
         meta.description = "cpp universal serialization library.";
         src = ./serp;
+        #src = ./.;
       };
       stfm = pkgs.gcc14Stdenv.mkDerivation {
         name = "stfmeta";

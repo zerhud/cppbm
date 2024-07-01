@@ -5,6 +5,7 @@
  */
 
 
+#include "utility.ipp"
 #include "reflection/concepts.ipp"
 #include "reflection/lref.ipp"
 #include "reflection/get_field_from_struct.ipp"

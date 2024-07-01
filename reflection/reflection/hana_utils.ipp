@@ -5,7 +5,6 @@
  */
 
 #include "hana.ipp"
-#include "decay.ipp"
 
 template<typename type> constexpr auto decay(const type&) { return type_c<decay_t<type>>; }
 
