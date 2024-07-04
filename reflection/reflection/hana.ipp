@@ -59,7 +59,7 @@ constexpr auto transform_uniq(type_list<> l) { return l; }
 template<typename first,typename... list>
 constexpr auto transform_uniq(type_list<first,list...> l) {
 	if constexpr(sizeof...(list)==0) return l;
-	else return push_back_if_not_contains(type_c<first>, transform_uniq(type_list<list...>{}));
+	else return push_front_if_not_contains(type_c<first>, transform_uniq(type_list<list...>{}));
 }
 
 template<typename initial>
