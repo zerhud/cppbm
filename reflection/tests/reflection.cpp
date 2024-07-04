@@ -17,13 +17,13 @@ struct st_4f {
 
 } // namespace tt2
 
-static_assert( tt::size<tt2::st_2f> == 2 );
-static_assert( tt::get<0>(tt2::st_1f{32}) == 32 );
-static_assert( tt::get<0>(tt2::st_2f{32}) == 32 );
-static_assert( tt::get<3>(tt2::st_4f{}) == 42 );
-static_assert( tt::type_c<decltype(tt::get<0>(tt2::st_2f{32}))> == tt::type_c<int&&> );
-static_assert( []{       tt2::st_2f obj{32}; return tt::type_c<decltype(tt::get<0>(obj))>; }() == tt::type_c<int&> );
-static_assert( []{ const tt2::st_2f obj{32}; return tt::type_c<decltype(tt::get<0>(obj))>; }() == tt::type_c<const int&> );
+static_assert( tt::gs::size<tt2::st_2f> == 2 );
+static_assert( tt::gs::get<0>(tt2::st_1f{32}) == 32 );
+static_assert( tt::gs::get<0>(tt2::st_2f{32}) == 32 );
+static_assert( tt::gs::get<3>(tt2::st_4f{}) == 42 );
+static_assert( tt::type_c<decltype(tt::gs::get<0>(tt2::st_2f{32}))> == tt::type_c<int&&> );
+static_assert( []{       tt2::st_2f obj{32}; return tt::type_c<decltype(tt::gs::get<0>(obj))>; }() == tt::type_c<int&> );
+static_assert( []{ const tt2::st_2f obj{32}; return tt::type_c<decltype(tt::gs::get<0>(obj))>; }() == tt::type_c<const int&> );
 
 #include <string_view>
 #include <source_location>
@@ -34,8 +34,8 @@ struct factory {
 };
 
 using namespace std::literals;
-static_assert( tt::field_name<factory, 0, tt2::st_2f>() == "f"sv );
-static_assert( tt::field_name<factory, 1, tt2::st_2f>() == "long_name_CAPS_test"sv );
+static_assert( tt::gs::field_name<factory, 0, tt2::st_2f>() == "f"sv );
+static_assert( tt::gs::field_name<factory, 1, tt2::st_2f>() == "long_name_CAPS_test"sv );
 
 #include <optional>
 
@@ -47,7 +47,7 @@ struct st_opt {
 };
 } // namespace tt2
 
-static_assert( tt::size<tt2::st_opt> == 2 );
+static_assert( tt::gs::size<tt2::st_opt> == 2 );
 
 int main(int,char**) {
 	return 0;
