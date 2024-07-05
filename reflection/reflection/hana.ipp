@@ -70,6 +70,25 @@ constexpr auto fold(type_list<first, list...>, initial init, auto&& fnc) {
 	else return fold(type_list<list...>{}, fnc(init, type_c<first>), fnc);
 }
 
+template<auto ind> constexpr auto nth(type_list<>) {
+	static_assert( false, "the index is out of range or try to get element from empty list" );
+}
+template<auto ind, typename first, typename... types> constexpr auto nth(type_list<first, types...>) {
+	if constexpr (ind==0) return type_c<first>;
+	else return nth<ind-1>(type_list<types...>{});
+}
+template<auto ind, typename... types> constexpr auto nth() { return nth<ind>(type_list<types...>{}); }
+
+template<typename type, typename... types> constexpr auto index_of(type_list<types...> list) {
+	if constexpr (!contains<type>(list)) return -1;
+	else {
+		auto ret = 0;
+		(void)( (++ret,type_c<type> == type_c<types>) || ... );
+		return ret-1;
+	}
+}
+template<typename type, typename... types> constexpr auto index_of() { return index_of<type>(type_list<types...>{}); }
+
 template<template<typename...>class holder, typename... types>
 constexpr auto create_list(holder<types...>&&) { return type_list<types...>{}; }
 template<template<typename...>class holder, typename... types>
